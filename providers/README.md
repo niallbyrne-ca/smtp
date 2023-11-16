@@ -25,5 +25,4 @@ provider_dkim() {
 provider_renew() {
   # Call certbot to renew existing certificates.
 }
-
 ```

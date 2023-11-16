@@ -1,2 +1,4 @@
 certs
 *.env
+.cicd-tools/boxes/*
+!.cicd-tools/boxes/bootstrap

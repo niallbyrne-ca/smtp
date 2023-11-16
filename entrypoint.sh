@@ -13,13 +13,13 @@ env_file() {
   fi
 }
 
-import () {
+import() {
   # $1 - path to scripts
   # $2 - description of import
   for SCRIPT in "${1}"/*.bash; do
     echo "CONTAINER > Import ${2}: ${SCRIPT}"
     # shellcheck disable=SC1090
-    source "${SCRIPT}";
+    source "${SCRIPT}"
   done
 }
 
@@ -34,7 +34,7 @@ main() {
   env_file
 
   import /usr/local/share/certs/providers "DNS Provider"
-  import /usr/local/share/certs/scripts   "Script Library"
+  import /usr/local/share/certs/scripts "Script Library"
 
   # shellcheck disable=SC2034
   if [[ "${TEST_MODE}" == "1" ]]; then

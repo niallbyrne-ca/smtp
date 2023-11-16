@@ -22,12 +22,12 @@ provider_dkim() {
     local CURL_RESPONSE
 
     CURL_RESPONSE="$(
-      curl -X POST                                          \
-        --fail                                              \
-        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"  \
-        -H "Content-Type: application/json"                 \
-        -d "${PAYLOAD}"                                     \
-        -sL                                                 \
+      curl -X POST \
+        --fail \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d "${PAYLOAD}" \
+        -sL \
         "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records"
     )"
     echo "${CURL_RESPONSE}"
@@ -37,12 +37,12 @@ provider_dkim() {
     local CURL_RESPONSE
 
     CURL_RESPONSE="$(
-      curl -X GET                                           \
-        --fail                                              \
-        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"  \
-        -H "Content-Type: application/json"                 \
-        -d "${PAYLOAD}"                                     \
-        -sL                                                 \
+      curl -X GET \
+        --fail \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d "${PAYLOAD}" \
+        -sL \
         "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records?type=TXT&match=all"
     )"
     echo "${CURL_RESPONSE}"
@@ -54,12 +54,12 @@ provider_dkim() {
     local CURL_RESPONSE
 
     CURL_RESPONSE="$(
-      curl -X PUT                                           \
-        --fail                                              \
-        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"  \
-        -H "Content-Type: application/json"                 \
-        -d "${PAYLOAD}"                                     \
-        -sL                                                 \
+      curl -X PUT \
+        --fail \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d "${PAYLOAD}" \
+        -sL \
         "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records/${1}"
     )"
     echo "${CURL_RESPONSE}"
