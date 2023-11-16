@@ -8,6 +8,10 @@ on:
   workflow_dispatch:
 
 #  secrets:
+#    REGISTRY_USERNAME:
+#      description: "Sets the username that will be used to log in to the registry."
+#    REGISTRY_PASSWORD:
+#      description: "Sets the password that will be used to log in to the registry."
 #    SLACK_WEBHOOK:
 #      description: "Optional, enables Slack notifications."
 #      required: false
@@ -86,6 +90,14 @@ jobs:
       CONCURRENCY: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_concurrency_limit }}
       PYTHON_VERSIONS: ${{ toJSON(fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_python_versions) }}
       REV_RANGE: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_commit_spelling_rev_range }}
+      VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
+
+  docker_container_lint:
+    needs: [configuration]
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-80-container-dockerfile_linter.yml@master
+    with:
       VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
 
   json_schema_lint:
@@ -190,18 +202,105 @@ jobs:
       PYTHON_VERSIONS: ${{ toJSON(fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_python_versions) }}
       VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
 
+  scan_container_aws:
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+    permissions:
+      security-events: write
+    needs: [commit_lint, commit_spell_check, configuration, docker_container_lint, json_schema_lint, markdown_links, markdown_lint, markdown_spelling, pre-commit_hooks, security, shell_lint, start, toml_lint, workflow_lint, yaml_lint]
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-10-container-security_scan_container.yml@master
+    with:
+      BUILD_ARGS: |
+        PROVIDER=aws
+      IMAGE_NAME: "docker.io/niallbyrne/smtp-aws"
+      REGISTRY: "docker.io"
+      VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
+
+  scan_container_cloudflare:
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+    permissions:
+      security-events: write
+    needs: [commit_lint, commit_spell_check, configuration, docker_container_lint, json_schema_lint, markdown_links, markdown_lint, markdown_spelling, pre-commit_hooks, security, shell_lint, start, toml_lint, workflow_lint, yaml_lint]
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-10-container-security_scan_container.yml@master
+    with:
+      BUILD_ARGS: |
+        PROVIDER=cloudflare
+      IMAGE_NAME: "docker.io/niallbyrne/smtp-cloudflare"
+      REGISTRY: "docker.io"
+      VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
+
+  push_container_aws:
+    if: github.ref == 'refs/heads/master'
+    needs: [configuration, scan_container_aws]
+    permissions:
+      packages: write
+    secrets:
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-95-container-push.yml@master
+    with:
+      BUILD_ARGS: |
+        PROVIDER=aws
+      IMAGE_NAME: "docker.io/niallbyrne/smtp-aws"
+      IMAGE_LATEST: true
+      REGISTRY: "docker.io"
+      VERBOSE_NOTIFICATIONS: true
+
+  push_container_cloudflare:
+    if: github.ref == 'refs/heads/master'
+    needs: [configuration, scan_container_cloudflare]
+    permissions:
+      packages: write
+    secrets:
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-95-container-push.yml@master
+    with:
+      BUILD_ARGS: |
+        PROVIDER=cloudflare
+      IMAGE_NAME: "docker.io/niallbyrne/smtp-cloudflare"
+      IMAGE_LATEST: true
+      REGISTRY: "docker.io"
+      VERBOSE_NOTIFICATIONS: true
+
   create_release:
     permissions:
       contents: write
-    needs: [commit_lint, commit_spell_check, configuration, json_schema_lint, markdown_links, markdown_lint, markdown_spelling, pre-commit_hooks, security, shell_lint, start, toml_lint, workflow_lint, yaml_lint]
+    needs: [configuration, push_container_aws, push_container_cloudflare]
     secrets:
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     uses: cicd-tools-org/cicd-tools/.github/workflows/job-99-poetry-create_release.yml@master
     with:
       JSON_APPENDED_CONTENT: ${{ toJSON(fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_extra_release_content) }}
 
-  success:
-    needs: [create_release]
+  success_master:
+    if: github.ref == 'refs/heads/master'
+    needs: [push_container_aws, push_container_cloudflare]
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-00-generic-notification.yml@master
+    with:
+      NOTIFICATION_EMOJI: ":checkered_flag:"
+      NOTIFICATION_MESSAGE: "Workflow has completed successfully!"
+
+  success_dev:
+    if: github.ref == 'refs/heads/dev'
+    needs: [scan_container_aws, scan_container_cloudflare]
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+    uses: cicd-tools-org/cicd-tools/.github/workflows/job-00-generic-notification.yml@master
+    with:
+      NOTIFICATION_EMOJI: ":checkered_flag:"
+      NOTIFICATION_MESSAGE: "Workflow has completed successfully!"
+
+  success_other:
+    if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/dev'
+    needs: [commit_lint, commit_spell_check, configuration, docker_container_lint, json_schema_lint, markdown_links, markdown_lint, markdown_spelling, pre-commit_hooks, security, shell_lint, start, toml_lint, workflow_lint, yaml_lint]
     secrets:
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     uses: cicd-tools-org/cicd-tools/.github/workflows/job-00-generic-notification.yml@master

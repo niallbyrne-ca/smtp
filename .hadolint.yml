@@ -1,0 +1,9 @@
+---
+ignored: []
+trustedRegistries:
+  - docker.io
+  - ghcr.io
+label-schema:
+  org.opencontainers.image.source: text
+  "org.opencontainers.image.description": text
+strict-labels: true

@@ -5,7 +5,7 @@ provider_create() {
 }
 
 provider_dependencies() {
-  apt install -y awscli python3-certbot-dns-route53
+  apt-get install -y --no-install-recommends awscli python3-certbot-dns-route53
 }
 
 provider_dkim() {

@@ -1,4 +1,4 @@
-FROM docker.io/cisagov/postfix:latest
+FROM docker.io/cisagov/postfix:0.1.1
 
 ENV ENV_FILE ""
 ENV DKIM_DELAY "30"
@@ -9,25 +9,28 @@ ENV USER_LIST "admin admin\n"
 
 ARG PROVIDER="aws"
 
+LABEL org.opencontainers.image.source="https://github.com/niallbyrne-ca/smtp"
+LABEL org.opencontainers.image.description="Wraps docker.io/cisagov/postfix with SSL and DKIM automation."
+
 RUN mkdir -p certbot /usr/local/share/certs/providers /usr/local/share/certs/scripts /run/secrets
 COPY providers/"${PROVIDER}".bash /usr/local/share/certs/providers
 COPY scripts/*.bash /usr/local/share/certs/scripts
 
-RUN apt-get update  \
-      &&            \
-    apt install -y  \
-    certbot         \
-    jq              \
-    procps          \
-    psmisc          \
-      &&            \
-    bash -c "       \
+RUN apt-get update                                              \
+      &&                                                        \
+    apt-get install -y --no-install-recommends                  \
+    certbot                                                     \
+    jq                                                          \
+      &&                                                        \
+    bash -c "                                                   \
       source /usr/local/share/certs/providers/${PROVIDER}.bash  \
         &&                                                      \
       provider_dependencies                                     \
-    "               \
-      &&            \
+    "                                                           \
+      &&                                                        \
     rm -rf /var/lib/apt/lists/*
+
+WORKDIR /root
 
 COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh

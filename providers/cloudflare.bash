@@ -6,7 +6,7 @@ provider_create() {
 }
 
 provider_dependencies() {
-  apt install -y curl python3-certbot-dns-cloudflare
+  apt-get install -y --no-install-recommends curl python3-certbot-dns-cloudflare
 }
 
 provider_dkim() {
