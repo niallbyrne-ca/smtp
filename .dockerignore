@@ -1,1 +1,6 @@
-test
+certs
+*.env
+.cicd-tools
+.github
+.vale
+
