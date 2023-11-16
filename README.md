@@ -2,6 +2,35 @@
 
 Wraps [cisagov/postfix-docker](https://github.com/cisagov/postfix-docker) in automation for generating [Let's Encrypt](https://letsencrypt.org/) SSL certificates and dkim DNS records.
 
+On DockerHub:
+
+- [docker.io/niallbyrne/smtp-aws](https://hub.docker.com/repository/docker/niallbyrne/smtp-aws)
+- [docker.io/niallbyrne/smtp-cloudflare](https://hub.docker.com/repository/docker/niallbyrne/smtp-cloudflare)
+
+## Usage Examples
+
+```bash
+docker pull docker.io/niallbyrne/smtp-aws
+docker run \
+  -v $(pwd)/certs:/etc/letsencrypt \
+  -v $(pwd)/aws.env:/mnt/aws.env \
+  -e ENV_FILE=/mnt/aws.env \
+  -p 587:587 \
+  docker.io/niallbyrne/smtp-aws
+```
+
+or
+
+```bash
+docker pull docker.io/niallbyrne/smtp-cloudflare
+docker run \
+  -v $(pwd)/certs:/etc/letsencrypt \
+  -v $(pwd)/cloudflare.env:/mnt/cloudflare.env \
+  -e ENV_FILE=/mnt/cloudflare.env \
+  -p 587:587 \
+  docker.io/niallbyrne/smtp-cloudflare
+```
+
 ## Build Arguments
 
 | Name     | Value                                         | Default |

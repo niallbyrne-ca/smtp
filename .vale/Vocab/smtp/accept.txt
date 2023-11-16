@@ -1,6 +1,7 @@
 aws|AWS
 certbot
 cloudflare|Cloudflare
+dockerhub|DockerHub
 dkim|DKIM
 env|Env
 mailarchive
