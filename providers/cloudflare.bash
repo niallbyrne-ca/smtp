@@ -6,7 +6,10 @@ provider_create() {
 }
 
 provider_dependencies() {
-  apt-get install -y --no-install-recommends curl python3-certbot-dns-cloudflare
+  apt-get install -y --no-install-recommends \
+    curl=7.88.* \
+    libcurl4=7.88.* \
+    python3-certbot-dns-cloudflare=1.*
 }
 
 provider_dkim() {

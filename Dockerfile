@@ -16,11 +16,15 @@ RUN mkdir -p certbot /usr/local/share/certs/providers /usr/local/share/certs/scr
 COPY providers/"${PROVIDER}".bash /usr/local/share/certs/providers
 COPY scripts/*.bash /usr/local/share/certs/scripts
 
+# Add Backports
+RUN printf "deb http://httpredir.debian.org/debian bullseye-backports main\ndeb-src http://httpredir.debian.org/debian bullseye-backports main" \
+              > /etc/apt/sources.list.d/backports.list
+
 RUN apt-get update                                              \
       &&                                                        \
     apt-get install -y --no-install-recommends                  \
-    certbot                                                     \
-    jq                                                          \
+    certbot=1.*                                                 \
+    jq=1.*                                                      \
       &&                                                        \
     bash -c "                                                   \
       source /usr/local/share/certs/providers/${PROVIDER}.bash  \
