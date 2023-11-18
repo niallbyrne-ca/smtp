@@ -13,7 +13,14 @@ ARG PROVIDER="aws"
 LABEL org.opencontainers.image.source="https://github.com/niallbyrne-ca/smtp"
 LABEL org.opencontainers.image.description="Wraps docker.io/cisagov/postfix with SSL and DKIM automation."
 
-RUN mkdir -p certbot /usr/local/share/certs/providers /usr/local/share/certs/scripts /run/secrets
+RUN mkdir -p                            \
+    certbot                             \
+    /run/secrets                        \
+    /usr/local/share/certs/hooks        \
+    /usr/local/share/certs/providers    \
+    /usr/local/share/certs/scripts
+
+COPY hooks/*.bash /usr/local/share/certs/hooks
 COPY providers/"${PROVIDER}".bash /usr/local/share/certs/providers
 COPY scripts/*.bash /usr/local/share/certs/scripts
 
@@ -39,7 +46,8 @@ RUN apt-get update                                              \
 WORKDIR /root
 
 COPY entrypoint.sh entrypoint.sh
-RUN chmod +x entrypoint.sh
+
+RUN chmod +x entrypoint.sh /usr/local/share/certs/hooks/*.bash
 
 EXPOSE 25/TCP 587/TCP 993/TCP
 

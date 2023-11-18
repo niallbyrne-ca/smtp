@@ -98,7 +98,7 @@ provider_dkim() {
 
 provider_renew() {
   write_credential_file
-  certbot renew "${TEST_MODE}" --dns_cloudflare --dns-cloudflare-credentials /tmp/cloudflare --dns-cloudflare-propagation-seconds "${DNS_PROPAGATION_DELAY}"
+  certbot renew "${TEST_MODE}" --dns_cloudflare --dns-cloudflare-credentials /tmp/cloudflare --dns-cloudflare-propagation-seconds "${DNS_PROPAGATION_DELAY}" --deploy-hook=/usr/local/share/certs/hooks/deploy.bash
 }
 
 write_credential_file() {

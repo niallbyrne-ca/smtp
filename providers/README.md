@@ -24,5 +24,6 @@ provider_dkim() {
 
 provider_renew() {
   # Call certbot to renew existing certificates.
+  # The '--deploy-hook' argument should be set to: /usr/local/share/certs/hooks/deploy.bash
 }
 ```

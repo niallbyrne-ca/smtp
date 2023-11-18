@@ -7,13 +7,7 @@ function renew() {
     sleep $((3600 * 24 * RENEW_INTERVAL_IN_DAYS))
     echo "CONTAINER > Attempting to renew certificates ..."
     pushd "certbot" || exit 127
-    if provider_renew; then
-      install_certificates
-    fi
+    provider_renew
     popd || exit 127
-
-    echo "CONTAINER > Reloading dovecot and postfix ..."
-    dovecot reload
-    postfix reload
   done
 }

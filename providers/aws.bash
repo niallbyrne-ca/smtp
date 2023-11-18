@@ -39,5 +39,5 @@ provider_dkim() {
 }
 
 provider_renew() {
-  certbot renew "${TEST_MODE}" --dns-route53 --dns-route53-propagation-seconds "${DNS_PROPAGATION_DELAY}"
+  certbot renew "${TEST_MODE}" --dns-route53 --dns-route53-propagation-seconds "${DNS_PROPAGATION_DELAY}" --deploy-hook=/usr/local/share/certs/hooks/deploy.bash
 }

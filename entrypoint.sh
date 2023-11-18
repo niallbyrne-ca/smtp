@@ -4,6 +4,9 @@ set -eo pipefail
 
 trap terminate SIGINT SIGTERM ERR EXIT
 
+# shellcheck disable=SC1091
+source /usr/local/share/certs/scripts/import.bash
+
 env_file() {
   if [[ -n "${ENV_FILE}" ]]; then
     set -a
@@ -11,16 +14,6 @@ env_file() {
     source "${ENV_FILE}"
     set +a
   fi
-}
-
-import() {
-  # $1 - path to scripts
-  # $2 - description of import
-  for SCRIPT in "${1}"/*.bash; do
-    echo "CONTAINER > Import ${2}: ${SCRIPT}"
-    # shellcheck disable=SC1090
-    source "${SCRIPT}"
-  done
 }
 
 terminate() {
