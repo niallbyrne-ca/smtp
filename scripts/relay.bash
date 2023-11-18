@@ -2,7 +2,7 @@
 
 SASL_PASSWORD_FILE="/etc/postfix/sasl/sasl_passwd"
 
-function relay() {
+function _fn_relay() {
   echo "CONTAINER > 'relay' function has been called."
   if [[ ! -e "${SASL_PASSWORD_FILE}" ]] && [[ -n "${RELAY_SERVER}" ]]; then
     echo "CONTAINER > 'relay' is waiting ${CONFIG_DELAY} seconds to update the postfix configuration ..."

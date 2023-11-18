@@ -5,8 +5,8 @@ source /usr/local/share/certs/scripts/import.bash
 
 main() {
   echo "CONTAINER > 'deploy' hook has been called."
-  import /usr/local/share/certs/scripts "Script Library"
-  install_certificates
+  _fn_import /usr/local/share/certs/scripts "Script Library"
+  _fn_install_certificates
   echo "CONTAINER > Reloading dovecot and postfix ..."
   dovecot reload
   postfix reload

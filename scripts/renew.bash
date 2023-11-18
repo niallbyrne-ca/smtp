@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function renew() {
+function _fn_renew() {
   echo "CONTAINER > 'renew' function has been called."
   while true; do
     echo "CONTAINER > 'renew' is waiting ${RENEW_INTERVAL_IN_DAYS} days before attempting the next certificate renewal ..."

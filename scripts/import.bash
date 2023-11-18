@@ -1,6 +1,6 @@
 #!/bin/bash
 
-import() {
+_fn_import() {
   # $1 - path to scripts
   # $2 - description of import
   for SCRIPT in "${1}"/*.bash; do

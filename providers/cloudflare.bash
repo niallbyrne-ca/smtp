@@ -1,7 +1,7 @@
 #!/bin/bash
 
 provider_create() {
-  write_credential_file
+  _fn_write_credential_file
   certbot certonly "${TEST_MODE}" --dns-cloudflare --dns-cloudflare-credentials /tmp/cloudflare --dns-cloudflare-propagation-seconds "${DNS_PROPAGATION_DELAY}" -d "*.${PRIMARY_DOMAIN}" -m "${CONTACT_EMAIL}" --agree-tos --no-eff-email
 }
 
@@ -21,7 +21,7 @@ provider_dkim() {
   local PAYLOAD
   local RESPONSE
 
-  dkim_create() {
+  _fn_dkim_create() {
     local CURL_RESPONSE
 
     CURL_RESPONSE="$(
@@ -36,7 +36,7 @@ provider_dkim() {
     echo "${CURL_RESPONSE}"
   }
 
-  dkim_get() {
+  _fn_dkim_get() {
     local CURL_RESPONSE
 
     CURL_RESPONSE="$(
@@ -51,7 +51,7 @@ provider_dkim() {
     echo "${CURL_RESPONSE}"
   }
 
-  dkim_update() {
+  _fn_dkim_update() {
     # $1: Record ID
 
     local CURL_RESPONSE
@@ -68,24 +68,24 @@ provider_dkim() {
     echo "${CURL_RESPONSE}"
   }
 
-  dkim_select_method() {
-    METHOD="dkim_create"
+  _fn_dkim_select_method() {
+    METHOD="_fn_dkim_create"
     while read -r LINE; do
       # shellcheck disable=SC2001
       PARSED_NAME=$(sed "s/^\([^\t]*\)\t\(.*\)$/\1/" <<< "${LINE}")
       # shellcheck disable=SC2001
       PARSED_ID=$(sed "s/^\([^\t]*\)\t\(.*\)$/\2/" <<< "${LINE}")
       if [[ "${PARSED_NAME}" == "mail._domainkey.${PRIMARY_DOMAIN}" ]]; then
-        METHOD="dkim_update"
+        METHOD="_fn_dkim_update"
         break
       fi
-    done < <(jq -r '.result[] | .name + "\t" + .id' <<< "$(dkim_get)")
+    done < <(jq -r '.result[] | .name + "\t" + .id' <<< "$(_fn_dkim_get)")
   }
 
   DKIM_CONTENT="$(cut -d"(" -f2 "/etc/opendkim/keys/${PRIMARY_DOMAIN}/mail.txt" | cut -d")" -f1 | tr -d ' "\n\t')"
   PAYLOAD=$(jq -r ".name = \"mail._domainkey.${PRIMARY_DOMAIN}\" | .content = \"${DKIM_CONTENT}\" | .type = \"TXT\"" <<< '{}')
 
-  dkim_select_method
+  _fn_dkim_select_method
 
   RESPONSE="$(eval "${METHOD}" "${PARSED_ID}")"
 
@@ -97,11 +97,11 @@ provider_dkim() {
 }
 
 provider_renew() {
-  write_credential_file
+  _fn_write_credential_file
   certbot renew "${TEST_MODE}" --dns_cloudflare --dns-cloudflare-credentials /tmp/cloudflare --dns-cloudflare-propagation-seconds "${DNS_PROPAGATION_DELAY}" --deploy-hook=/usr/local/share/certs/hooks/deploy.bash
 }
 
-write_credential_file() {
+_fn_write_credential_file() {
   echo "dns_cloudflare_api_token = ${CLOUDFLARE_API_TOKEN}" >> /tmp/cloudflare
   chmod 600 /tmp/cloudflare
 }
