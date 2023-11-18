@@ -22,7 +22,7 @@ WORKFLOW_NAME="${WORKFLOW_NAME:-""}"
 main() {
 
   PROJECT_NAME="smtp"
-  PROJECT_OWNER="niallbyrne_ca"
+  PROJECT_OWNER="niallbyrne-ca"
 
   BRANCH_OR_TAG="$(echo "${GITHUB_REF}" | sed -E 's,refs/heads/|refs/tags/,,g')"
   WORKFLOW_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"

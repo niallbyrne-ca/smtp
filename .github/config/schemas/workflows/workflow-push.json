@@ -30,7 +30,7 @@
     "ci_extra_release_content": {
       "description": "This controls the concurrency of each matrix instance in GitHub Actions.",
       "type": "array",
-      "contains": {
+      "items": {
         "type": "string"
       }
     },
