@@ -45,19 +45,19 @@ docker run \
 
 You may set the following environment variables to customize the container's behaviour:
 
-| Name                     | Value                                                                                              | Default         |
-|--------------------------|----------------------------------------------------------------------------------------------------|-----------------|
-| CONFIG_DELAY             | The time to wait for cisagov/postfix-docker to finish configuring postfix.                         | 30              |
-| CONTACT_EMAIL            | Let's Encrypt Contact Email.  This is required by Let's Encrypt.                                   | No Default      |
-| DKIM_DELAY               | The time to wait for opendkim to generate a dkim value.                                            | 30              |
-| DNS_PROPAGATION_DELAY    | The time for Let's Encrypt to wait for DNS changes.                                                | 30              |
-| PRIMARY_DOMAIN           | The domain postfix is running for.                                                                 | No Default      |
-| RELAY_SERVER             | The relay server to use for outgoing mail. (If omitted, then no relay server is used.)             | No Default      |
-| RELAY_SERVER_CREDENTIALS | The username/password pair to use for the relay server. (In "username:password" format.)           | No Default      |
-| RELAY_SERVER_PORT        | The port used by the SMTP relay server.                                                            | No Default      |
-| RENEW_INTERVAL_IN_DAYS   | The interval (in days) to attempt to renew the certificates.                                       | 7               |
-| TEST_MODE                | Set to "0" after you have tested certificate generation.                                           | 1               |
-| USER_LIST                | A newline separated list of user/password pairs:<br />"username1 password1\nusername2 password2\n" | "admin admin\n" |
+| Name                     | Value                                                                                                                                     | Default         |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| CONFIG_DELAY             | The time to wait for cisagov/postfix-docker to finish configuring postfix.                                                                | 30              |
+| CONTACT_EMAIL            | Let's Encrypt Contact Email.  This is required by Let's Encrypt.                                                                          | No Default      |
+| DKIM_DELAY               | The time to wait for opendkim to generate a dkim value.                                                                                   | 30              |
+| DNS_PROPAGATION_DELAY    | The time for Let's Encrypt to wait for DNS changes.                                                                                       | 30              |
+| PRIMARY_DOMAIN           | The domain postfix is running for.                                                                                                        | No Default      |
+| RELAY_SERVER             | The relay server to use for outgoing mail. (If omitted, then no relay server is used.)                                                    | No Default      |
+| RELAY_SERVER_CREDENTIALS | The username/password pair to use for the relay server. (In "username:password" format.)                                                  | No Default      |
+| RELAY_SERVER_PORT        | The port used by the SMTP relay server.                                                                                                   | No Default      |
+| RENEW_INTERVAL_IN_DAYS   | The interval (in days) to attempt to renew the certificates.                                                                              | 7               |
+| TEST_MODE                | Set to "0" after you have tested certificate generation.                                                                                  | 1               |
+| USER_LIST                | A newline separated list of user/password pairs:<br />"username1 password1\nusername2 password2\n"<br />(Alphanumerical characters only.) | "admin admin\n" |
 
 ### DNS Providers
 
