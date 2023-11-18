@@ -1,5 +1,6 @@
 FROM docker.io/cisagov/postfix:0.1.1
 
+ENV CONFIG_DELAY "30"
 ENV ENV_FILE ""
 ENV DKIM_DELAY "30"
 ENV DNS_PROPAGATION_DELAY "30"
@@ -25,6 +26,7 @@ RUN apt-get update                                              \
     apt-get install -y --no-install-recommends                  \
     certbot=1.*                                                 \
     jq=1.*                                                      \
+    libsasl2-modules=2.*                                        \
       &&                                                        \
     bash -c "                                                   \
       source /usr/local/share/certs/providers/${PROVIDER}.bash  \

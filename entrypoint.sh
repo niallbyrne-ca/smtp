@@ -46,6 +46,7 @@ main() {
   create  # Create initial certificates
   users   # Configure users and passwords
   renew & # Start certificate renewal process
+  relay & # Start deferred relay server configuration
   dkim &  # Start deferred dkim update process
 
   echo "CONTAINER > Starting postfix ..."
