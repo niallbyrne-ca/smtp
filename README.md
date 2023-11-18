@@ -8,8 +8,8 @@ Wraps [cisagov/postfix-docker](https://github.com/cisagov/postfix-docker) in aut
 
 On DockerHub:
 
-- [docker.io/niallbyrne/smtp-aws](https://hub.docker.com/repository/docker/niallbyrne/smtp-aws)
-- [docker.io/niallbyrne/smtp-cloudflare](https://hub.docker.com/repository/docker/niallbyrne/smtp-cloudflare)
+- [docker.io/niallbyrne/smtp-aws](https://hub.docker.com/r/niallbyrne/smtp-aws)
+- [docker.io/niallbyrne/smtp-cloudflare](https://hub.docker.com/r/niallbyrne/smtp-cloudflare)
 
 ## Usage Examples
 
