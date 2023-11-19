@@ -35,11 +35,11 @@ main() {
     TEST_MODE="-q"
   fi
 
-  _fn_create  # Create initial certificates
-  _fn_users   # Configure users and passwords
-  _fn_renew & # Start certificate renewal process
-  _fn_relay & # Start deferred relay server configuration
-  _fn_dkim &  # Start deferred dkim update process
+  _fn_create   # Create initial certificates
+  _fn_users    # Configure users and passwords
+  _fn_renew &  # Start certificate renewal process
+  _fn_config & # Start deferred configuration update
+  _fn_dkim &   # Start deferred dkim update process
 
   echo "CONTAINER > Starting postfix ..."
   ./docker-entrypoint.sh "$@"

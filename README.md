@@ -47,6 +47,7 @@ You may set the following environment variables to customize the container's beh
 
 | Name                     | Value                                                                                                                                     | Default         |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|-----------------|
+| CLIENT_DOMAIN_WHITELIST  | A space separated list of domains you wish to allow to use your SMTP server.  The default allows any client to try and authenticate.      | No Default      |
 | CONFIG_DELAY             | The time to wait for cisagov/postfix-docker to finish configuring postfix.                                                                | 30              |
 | CONTACT_EMAIL            | Let's Encrypt Contact Email.  This is required by Let's Encrypt.                                                                          | No Default      |
 | DKIM_DELAY               | The time to wait for opendkim to generate a dkim value.                                                                                   | 30              |
