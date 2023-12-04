@@ -2,6 +2,7 @@ aws|AWS
 backports
 certbot
 cloudflare|Cloudflare
+commitizen
 dev|Dev
 dockerhub|DockerHub
 dkim|DKIM
