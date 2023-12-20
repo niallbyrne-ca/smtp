@@ -242,7 +242,7 @@ jobs:
     with:
       BUILD_ARGS: |
         PROVIDER=aws
-      IMAGE_NAME: "docker.io/niallbyrne/smtp-aws"
+      IMAGE_NAME: "niallbyrne/smtp-aws"
       IMAGE_LATEST: ${{ github.ref == 'refs/heads/master' }}
       REGISTRY: "docker.io"
       VERBOSE_NOTIFICATIONS: true
@@ -259,7 +259,7 @@ jobs:
     with:
       BUILD_ARGS: |
         PROVIDER=cloudflare
-      IMAGE_NAME: "docker.io/niallbyrne/smtp-cloudflare"
+      IMAGE_NAME: "niallbyrne/smtp-cloudflare"
       IMAGE_LATEST: ${{ github.ref == 'refs/heads/master' }}
       REGISTRY: "docker.io"
       VERBOSE_NOTIFICATIONS: true
