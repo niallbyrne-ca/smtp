@@ -212,7 +212,7 @@ jobs:
     with:
       BUILD_ARGS: |
         PROVIDER=aws
-      IMAGE_NAME: "docker.io/niallbyrne/smtp-aws"
+      IMAGE_NAME: "niallbyrne/smtp-aws"
       REGISTRY: "docker.io"
       VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
 
@@ -226,7 +226,7 @@ jobs:
     with:
       BUILD_ARGS: |
         PROVIDER=cloudflare
-      IMAGE_NAME: "docker.io/niallbyrne/smtp-cloudflare"
+      IMAGE_NAME: "niallbyrne/smtp-cloudflare"
       REGISTRY: "docker.io"
       VERBOSE_NOTIFICATIONS: ${{ fromJSON(needs.configuration.outputs.JSON_FILE_DATA).ci_verbose_notifications }}
 
