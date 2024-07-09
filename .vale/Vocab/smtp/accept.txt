@@ -9,4 +9,5 @@ dockerhub|DockerHub
 dkim|DKIM
 env|Env
 mailarchive
+zipp
 
