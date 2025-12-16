@@ -53,7 +53,7 @@ scenario() {
 
   test_toml_lint_passes() {
     util "git_reset"
-    sed -i.bak "s/python = '^3.9/python = '>=3.10.0,<4.0/g" pyproject.toml
+    sed -i.bak "s/python = '^3.10/python = '>=3.10.0,<4.0/g" pyproject.toml
     git stage pyproject.toml
     git commit -m 'test(PRE-COMMIT): upgrade python without issue'
   }
