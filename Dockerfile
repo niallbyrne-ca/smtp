@@ -24,6 +24,10 @@ COPY hooks/*.bash /usr/local/share/certs/hooks
 COPY providers/"${PROVIDER}".bash /usr/local/share/certs/providers
 COPY scripts/*.bash /usr/local/share/certs/scripts
 
+# Debian Bullseye has reached EOL, migrate to bookworm
+RUN sed -i '/debian-security/s/^/#/' /etc/apt/sources.list &&
+    echo "deb http://archive.debian.org/debian-security bullseye-security main" >> /etc/apt/sources.list
+
 # Add Backports
 RUN printf "deb http://archive.debian.org/debian bullseye-backports main\ndeb-src http://archive.debian.org/debian bullseye-backports main" \
               > /etc/apt/sources.list.d/backports.list
